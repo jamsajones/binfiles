@@ -1,0 +1,34 @@
+#!/bin/bash
+
+search_path=`pwd`
+
+if [[ $2 ]]; then
+  search_path=$2
+fi
+
+
+if [[ $search_path =~ "*" && ! -f $search_path && ! -d $search_path ]]; then
+  echo "Filename $search_path does not exists"
+  exit 1
+fi
+
+#echo gerp -irvl $1 $search_path
+matched=$( grep -irl $1 $search_path )
+
+for i in $matched
+  do
+    echo $i
+done
+
+
+echo -n "Open these files in vim? "
+
+read a
+answer="${a,,}"
+
+if [[ $answer != "y" && $answer != "yes" ]]; then
+  echo "not opening in vim"
+  exit 0;
+fi
+
+v $matched
